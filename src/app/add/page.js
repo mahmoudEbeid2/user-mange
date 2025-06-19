@@ -14,7 +14,7 @@ export default function AddUserPage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      signIn(); // توجيه تلقائي لصفحة تسجيل الدخول
+      signIn(); 
     }
   }, [status]);
 
@@ -26,7 +26,7 @@ export default function AddUserPage() {
     setLoading(true);
     try {
       await createUser(form);
-      router.push("/"); // رجوع للصفحة الرئيسية
+      router.push("/"); 
     } catch (err) {
       alert("❌ " + err.message);
     } finally {
