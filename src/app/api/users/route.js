@@ -8,18 +8,36 @@ const userSchema = z.object({
 });
 
 export async function GET() {
-  await connectDB();
-  const users = await User.find();
-  return Response.json(users);
+  try {
+    await connectDB();
+    const users = await User.find();
+    return Response.json(users);
+  } catch (error) {
+    console.error("❌ GET /api/users error:", error);
+    return Response.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req) {
-  const body = await req.json();
-  const parsed = userSchema.safeParse(body);
-  if (!parsed.success)
-    return Response.json({ error: "Invalid data" }, { status: 400 });
+  try {
+    const body = await req.json();
 
-  await connectDB();
-  const user = await User.create(body);
-  return Response.json(user);
+    const parsed = userSchema.safeParse(body);
+    if (!parsed.success) {
+      return Response.json({ error: "Invalid data" }, { status: 400 });
+    }
+
+    await connectDB();
+    const user = await User.create(body);
+    return Response.json(user);
+  } catch (error) {
+    console.error("❌ POST /api/users error:", error);
+    return Response.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
